@@ -225,7 +225,7 @@ def section_activity2():
         if biostat_answer == "Biology and Health Sciences":
             st.success(
                 "Correct! 😊 Biostatistics is mainly used in the biological and health sciences.")
-            st.balloons
+            st.balloons()
         else:
             st.error(
                 "Oops! 😞 That's incorrect. The correct answer is 'Biology and Health Sciences'. Try again!")
@@ -244,7 +244,7 @@ def section_activity2():
         if population_answer == "All members of a defined group":
             st.success(
                 "Correct! 😊 A population includes all members of a defined group.")
-            st.balloons
+            st.balloons()
         else:
             st.error("Oops! 😞 Try again!")
 
@@ -289,7 +289,7 @@ def section_activity2():
 
         if score == 4:
             st.success("Correct! 😊 You got all the data type questions right!")
-            st.balloons
+            st.balloons()
         else:
             st.error(
                 f"Oops! 😞 You got {4 - score} answer(s) wrong. Please review your answers.")
@@ -312,7 +312,7 @@ def section_activity2():
     if st.button("Submit for Scenario 4"):
         if summation_answer == "15":
             st.success("Correct! 😊 The sum of numbers from 1 to 5 is 15.")
-            st.balloons
+            st.balloons()
         else:
             st.error("Oops! 😞 That's incorrect. Try again!")
 
@@ -334,7 +334,7 @@ def section_activity2():
         correct_mean = np.mean([5, 10, 15, 20, 25])
         if user_mean == correct_mean:
             st.success(f"Correct! 😊 The mean value is {correct_mean}.")
-            st.balloons
+            st.balloons()
         else:
             st.error(f"Oops! 😞 Try again!")
 
