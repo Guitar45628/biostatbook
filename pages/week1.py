@@ -74,12 +74,12 @@ def main():
 
     st.write("---")
 
-    # Activity 1 Section
-    st.header("Activity: Basic Statistical Tools in Python")
-    st.write("Modify and run the Python code below to compute basic statistical measures.")
+# Activity 1 Section
+st.header("Activity: Basic Statistical Tools in Python")
+st.write("Modify and run the Python code below to compute basic statistical measures.")
 
-    # Default code
-    default_code = '''\
+# Default code
+default_code = '''\
 import numpy as np
 import statistics
 
@@ -96,32 +96,37 @@ print(f'Median: {median_value}')
 print(f'Mode: {mode_value}')
 print(f'Variance: {variance_value}')
 print(f'Standard Deviation: {std_dev_value}')
-    '''
+'''
 
-    st.code(default_code, language="python")
+# ใช้ session_state เพื่อเก็บโค้ดที่แก้ไข
+if "user_code" not in st.session_state:
+    st.session_state.user_code = default_code
 
-    st.subheader("Edit and Run the Code here:")
+# แสดง Code Editor
+user_code = st.text_area("Edit and Run the Code here:", st.session_state.user_code, height=200)
 
-    # Code Editor using code_editor function
-    response_dict = code_editor(default_code,height=20)
-    user_code = response_dict.get("code", default_code)
+# ปุ่มรันโค้ด
+if st.button("Run Code"):
+    try:
+        # Capture the output
+        output = io.StringIO()
+        sys.stdout = output  # Redirect stdout
 
-    # Run the code
-    if st.button("Run Code"):
-        try:
-            # Capture the output
-            output = io.StringIO()
-            sys.stdout = output  # Redirect stdout
+        # อัปเดต session_state ก่อนรันโค้ด
+        st.session_state.user_code = user_code  
 
-            exec(user_code)  # Execute the user code
+        # Execute user-edited code
+        exec(st.session_state.user_code, {})
 
-            sys.stdout = sys.__stdout__  # Reset stdout
+        # Reset stdout
+        sys.stdout = sys.__stdout__
 
-            st.success("Code executed successfully!")
-            st.text_area("Output:", output.getvalue(), height=150)
-        
-        except Exception as e:
-            st.error(f"Error: {e}")
+        # แสดงผลลัพธ์
+        st.success("Code executed successfully!")
+        st.text_area("Output:", output.getvalue(), height=150)
+
+    except Exception as e:
+        st.error(f"Error: {e}")
 
     # Activity 2 Section
     st.subheader("Help Me Code")
