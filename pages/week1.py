@@ -1,22 +1,15 @@
-from io import StringIO
-import sys
 import numpy as np
 import streamlit as st
 from modules.nav import Navbar
 import statistics
-from code_editor import code_editor
+from modules.code_editor_all import code_editor_for_all
 
-st.set_page_config(page_title="Week 1 | Introduction to Biostatistics")
+# Page Title
+st.set_page_config(page_title="Week 01 | Introduction to Biostatistics")
 
 
-def main():
-    Navbar()
-
-    # Title
-    st.title("Week 1: Introduction to Biostatistics")
-
-    # Table of Contents
-    st.header("Table of Contents")
+def section_table_of_contents():
+    st.header("📚 Table of Contents")
     st.markdown(""" 
     1. [Definition and Scope of Biostatistics](#definition-and-scope-of-biostatistics)  
     2. [Differences Between Populations and Samples](#differences-between-populations-and-samples)  
@@ -28,8 +21,8 @@ def main():
     8. [Role-Play Activity: Biostatistics Investigator](#role-play-activity-biostatistics-investigator) 
     """, unsafe_allow_html=True)
 
-    st.write("---")
 
+def section_recap():
     # Section: Introduction
     st.header("Definition and Scope of Biostatistics")
     st.write("Biostatistics is the application of statistical methods to biological and health sciences. It helps in making data-driven decisions in medicine, epidemiology, and public health.")
@@ -54,8 +47,8 @@ def main():
         "Descriptive statistics summarize and describe data. Key measures include:")
     st.write("- **Mean**: Average value\n- **Median**: Middle value\n- **Mode**: Most frequent value\n- **Variance**: Measure of data spread\n- **Standard Deviation**: Square root of variance")
 
-    st.write("---")
 
+def section_quiz():
     # Quiz Section
     st.header("Quiz: Test Your Knowledge")
     questions = [
@@ -73,16 +66,18 @@ def main():
 
     score = 0
     for i, (q, options, correct) in enumerate(questions):
-        user_answer = st.radio(q, options, key=f"q{i}")
+        user_answer = st.radio(q, options, key=f"q{i}", index=None,)
         if user_answer == correct:
             score += 1
 
     if st.button("Submit Quiz"):
         st.success(f"You scored {score}/5!")
+        if score == 5:
+            st.balloons()
 
-    st.write("---")
 
-    # Activity 1 Section
+def section_activity1():
+    # Activity Section
     st.header("Activity: Basic Statistical Tools in Python")
     st.write(
         "Modify and run the Python code below to compute basic statistical measures.")
@@ -131,94 +126,8 @@ print(f'Standard Deviation: {std_dev_value}')
         num_elements = np.random.randint(10, 21)
         st.session_state.rand_numbers = np.random.randint(0, 10, num_elements)
 
-    st.subheader("Edit and Run the Code here:")
-
-    # Code Editor using code_editor function
-
-    # css to inject related to info bar
-    css_string = '''
-    background-color: #bee1e5;
-
-    body > #root .ace-streamlit-dark~& {
-    background-color: #262830;
-    }
-
-    .ace-streamlit-dark~& span {
-    color: #fff;
-    opacity: 0.6;
-    }
-
-    span {
-    color: #000;
-    opacity: 0.5;
-    }
-
-    .code_editor-info.message {
-    width: inherit;
-    margin-right: 75px;
-    order: 2;
-    text-align: center;
-    opacity: 0;
-    transition: opacity 0.7s ease-out;
-    }
-
-    .code_editor-info.message.show {
-    opacity: 0.6;
-    }
-
-    .ace-streamlit-dark~& .code_editor-info.message.show {
-    opacity: 0.5;
-    }
-    '''
-    # create info bar dictionary
-    info_bar = {
-    "name": "language info",
-    "css": css_string,
-    "style": {
-                "order": "1",
-                "display": "flex",
-                "flexDirection": "row",
-                "alignItems": "center",
-                "width": "100%",
-                "height": "2.5rem",
-                "padding": "0rem 0.75rem",
-                "borderRadius": "8px 8px 0px 0px",
-                "zIndex": "9993"
-            },
-    "info": [{
-                "name": "Python",
-                "style": {"width": "100px"}
-            }]
-    }
-    # add info bar to code editor
-    response_dict = code_editor("#Edit your code here!\n#Save before run!", height=[10, 20], buttons=[
-        {
-            "name": "Save",
-            "feather": "Save",
-            "hasText": True,
-            "commands": ["save-state", ["response", "saved"]],
-            "response": "saved",
-            "showWithIcon": True,
-            "style": {"top": "0rem", "right": "0.4rem"}
-        },
-    ],lang="python",info=info_bar)
-    user_code = response_dict.get("text", default_code)
-
-    st.write("*Dont forget to save your code before running it!* (ctrl+enter or save button)")
-    # Run the code
-    if st.button("Run Code"):
-        try:
-            # Capture the output
-            output = StringIO()
-            sys.stdout = output  # Redirect stdout
-            exec(user_code)  # Execute the user code
-            sys.stdout = sys.__stdout__  # Reset stdout
-            st.toast("Code executed successfully!")
-            # st.toast(user_code)
-            st.text_area("Output:", output.getvalue(), height=150)
-
-        except Exception as e:
-            st.error(f"Error: {e}")
+    # Code Editor
+    code_editor_for_all()
 
     # Create a form for the user to input answers
     with st.form("stats_form"):
@@ -280,9 +189,9 @@ print(f'Standard Deviation: {std_dev_value}')
             st.error(
                 f"Standard Deviation: Incorrect! (Your answer: {user_sd:.2f}, Correct: {correct_sd:.2f})")
 
-    st.write("---")
 
-    # Activity 3 Section
+def section_activity2():
+    # Activity 2 Section
     st.header("Role-Play Activity: Biostatistics Investigator")
 
     # Introduction to the activity
@@ -301,13 +210,14 @@ print(f'Standard Deviation: {std_dev_value}')
     """)
 
     biostat_answer = st.radio("What is the primary field of application for biostatistics?", [
-                              "Physics", "Biology and Health Sciences", "Engineering", "Astronomy"])
+                              "Physics", "Biology and Health Sciences", "Engineering", "Astronomy"], index=None)
 
     # Submit button for scenario 1
     if st.button("Submit for Scenario 1"):
         if biostat_answer == "Biology and Health Sciences":
             st.success(
                 "Correct! 😊 Biostatistics is mainly used in the biological and health sciences.")
+            st.balloons
         else:
             st.error(
                 "Oops! 😞 That's incorrect. The correct answer is 'Biology and Health Sciences'. Try again!")
@@ -319,13 +229,14 @@ print(f'Standard Deviation: {std_dev_value}')
     """)
 
     population_answer = st.radio("Which of the following describes a population?", [
-                                 "A group of randomly selected individuals from a larger population", "All members of a defined group", "A single person in a study", "None of the above"])
+                                 "A group of randomly selected individuals from a larger population", "All members of a defined group", "A single person in a study", "None of the above"], index=None)
 
     # Submit button for scenario 2
     if st.button("Submit for Scenario 2"):
         if population_answer == "All members of a defined group":
             st.success(
                 "Correct! 😊 A population includes all members of a defined group.")
+            st.balloons
         else:
             st.error("Oops! 😞 Try again!")
 
@@ -370,6 +281,7 @@ print(f'Standard Deviation: {std_dev_value}')
 
         if score == 4:
             st.success("Correct! 😊 You got all the data type questions right!")
+            st.balloons
         else:
             st.error(
                 f"Oops! 😞 You got {4 - score} answer(s) wrong. Please review your answers.")
@@ -385,12 +297,14 @@ print(f'Standard Deviation: {std_dev_value}')
 
     """)
 
-    summation_answer = st.radio("Choose your answer:", ["10", "15", "20", "5"])
+    summation_answer = st.radio("Choose your answer:", [
+                                "10", "15", "20", "5"], index=None)
 
     # Submit button for scenario 4
     if st.button("Submit for Scenario 4"):
         if summation_answer == "15":
             st.success("Correct! 😊 The sum of numbers from 1 to 5 is 15.")
+            st.balloons
         else:
             st.error("Oops! 😞 That's incorrect. Try again!")
 
@@ -412,8 +326,49 @@ print(f'Standard Deviation: {std_dev_value}')
         correct_mean = np.mean([5, 10, 15, 20, 25])
         if user_mean == correct_mean:
             st.success(f"Correct! 😊 The mean value is {correct_mean}.")
+            st.balloons
         else:
             st.error(f"Oops! 😞 Try again!")
+
+
+def main():
+    Navbar()
+
+    # Title
+    st.title("Week 01 | Introduction to Biostatistics")
+
+    section_table_of_contents()
+
+    st.divider()
+
+    section_recap()
+
+    st.divider()
+
+    section_quiz()
+
+    st.divider()
+
+    section_activity1()
+
+    st.divider()
+
+    section_activity2()
+
+    st.divider()
+
+    st.markdown("""
+<div style='
+    text-align: center;
+    padding: 0px;
+    margin: 0px auto;
+    max-width: 600px;
+    border-radius: 10px;
+    ;
+'>
+    <h2>End of Week 1 🎉</h2>
+</div>
+""", unsafe_allow_html=True)
 
 
 if __name__ == '__main__':
