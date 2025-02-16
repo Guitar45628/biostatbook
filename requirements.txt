@@ -1,1 +1,4 @@
 streamlit
+st_pages
+scipy
+streamlit_code_editor
