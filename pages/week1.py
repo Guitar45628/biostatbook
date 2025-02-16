@@ -1,4 +1,4 @@
-import io
+from io import StringIO
 import sys
 import numpy as np
 import streamlit as st
@@ -8,13 +8,14 @@ from code_editor import code_editor
 
 st.set_page_config(page_title="Week 1 | Introduction to Biostatistics")
 
+
 def main():
     Navbar()
 
     # Title
     st.title("Week 1: Introduction to Biostatistics")
 
-     # Table of Contents
+    # Table of Contents
     st.header("Table of Contents")
     st.markdown(""" 
     1. [Definition and Scope of Biostatistics](#definition-and-scope-of-biostatistics)  
@@ -44,11 +45,13 @@ def main():
     # Section: Summation Notation
     st.header("Summation Notation and Basic Mathematical Tools")
     st.latex(r"""\sum_{i=1}^{n} x_i""")
-    st.write("Summation notation is a compact way to represent the sum of a sequence of numbers.")
+    st.write(
+        "Summation notation is a compact way to represent the sum of a sequence of numbers.")
 
     # Section: Descriptive Statistics
     st.header("Introduction to Descriptive Statistics")
-    st.write("Descriptive statistics summarize and describe data. Key measures include:")
+    st.write(
+        "Descriptive statistics summarize and describe data. Key measures include:")
     st.write("- **Mean**: Average value\n- **Median**: Middle value\n- **Mode**: Most frequent value\n- **Variance**: Measure of data spread\n- **Standard Deviation**: Square root of variance")
 
     st.write("---")
@@ -56,11 +59,16 @@ def main():
     # Quiz Section
     st.header("Quiz: Test Your Knowledge")
     questions = [
-        ("What is biostatistics mainly used for?", ["Physics", "Biology and health sciences", "Engineering", "Astronomy"], "Biology and health sciences"),
-        ("Which type of data has a true zero?", ["Categorical", "Ordinal", "Interval", "Ratio"], "Ratio"),
-        ("What is the median of the dataset [3, 5, 7, 9, 11]?", ["5", "7", "9", "6"], "7"),
-        ("What does summation notation (∑) represent?", ["Product", "Sum", "Difference", "Ratio"], "Sum"),
-        ("Which measure represents data spread?", ["Mean", "Median", "Variance", "Mode"], "Variance")
+        ("What is biostatistics mainly used for?", [
+         "Physics", "Biology and health sciences", "Engineering", "Astronomy"], "Biology and health sciences"),
+        ("Which type of data has a true zero?", [
+         "Categorical", "Ordinal", "Interval", "Ratio"], "Ratio"),
+        ("What is the median of the dataset [3, 5, 7, 9, 11]?", [
+         "5", "7", "9", "6"], "7"),
+        ("What does summation notation (∑) represent?", [
+         "Product", "Sum", "Difference", "Ratio"], "Sum"),
+        ("Which measure represents data spread?", [
+         "Mean", "Median", "Variance", "Mode"], "Variance")
     ]
 
     score = 0
@@ -76,68 +84,39 @@ def main():
 
     # Activity 1 Section
     st.header("Activity: Basic Statistical Tools in Python")
-    st.write("Modify and run the Python code below to compute basic statistical measures.")
+    st.write(
+        "Modify and run the Python code below to compute basic statistical measures.")
 
     # Default code
     default_code = '''\
-    import numpy as np
-    import statistics
+import numpy as np
+import statistics
 
-    data = [10, 20, 30, 40, 50, 20, 10, 20, 30, 60]
+data = [10, 20, 30, 40, 50, 20, 10, 20, 30, 60]
 
-    mean_value = np.mean(data)
-    median_value = np.median(data)
-    mode_value = statistics.mode(np.array(data))
-    variance_value = np.var(data)
-    std_dev_value = np.std(data)
+mean_value = np.mean(data)
+median_value = np.median(data)
+mode_value = statistics.mode(np.array(data))
+variance_value = np.var(data)
+std_dev_value = np.std(data)
 
-    print(f'Mean: {mean_value}')
-    print(f'Median: {median_value}')
-    print(f'Mode: {mode_value}')
-    print(f'Variance: {variance_value}')
-    print(f'Standard Deviation: {std_dev_value}')
+print(f'Mean: {mean_value}')
+print(f'Median: {median_value}')
+print(f'Mode: {mode_value}')
+print(f'Variance: {variance_value}')
+print(f'Standard Deviation: {std_dev_value}')
     '''
 
-    # ใช้ session_state เพื่อเก็บโค้ดที่แก้ไข
-    if "user_code" not in st.session_state:
-        st.session_state.user_code = default_code
+    st.code(default_code, language="python")
 
-    # แสดง Code Editor
-    user_code = st.text_area("Edit and Run the Code here:", st.session_state.user_code, height=200)
-
-    # ปุ่มรันโค้ด
-    if st.button("Run Code"):
-        try:
-            # Capture the output
-            output = io.StringIO()
-            sys.stdout = output  # Redirect stdout
-
-            # อัปเดต session_state ก่อนรันโค้ด
-            st.session_state.user_code = user_code  
-
-            # Execute user-edited code
-            exec(st.session_state.user_code, {})
-
-            # Reset stdout
-            sys.stdout = sys.__stdout__
-
-            # แสดงผลลัพธ์
-            st.success("Code executed successfully!")
-            st.text_area("Output:", output.getvalue(), height=150)
-
-        except Exception as e:
-            st.error(f"Error: {e}")
-
-    # Activity 2 Section
-    st.subheader("Help Me Code")
-    
     # อธิบายกิจกรรมนี้ โดยสั้นๆคือให้ผู้ใช้คำนวณค่าทางสถิติจากข้อมูลที่สุ่มขึ้นมา แล้วตอบในช่องให้ถูกต้อง โดยสามารถเขียนโค้ดได้
     st.write("In this activity, you will calculate basic statistical measures from a randomly generated dataset. You can write your own code to compute the mean, median, mode, variance, and standard deviation.")
-    
+
     # Check if rand_numbers already exists in session state, if not, generate it
     if "rand_numbers" not in st.session_state:
         # Random numbers between 10 and 20 elements, values between 0 and 100
-        num_elements = np.random.randint(10, 21)  # Random number of elements between 10 and 20
+        # Random number of elements between 10 and 20
+        num_elements = np.random.randint(10, 21)
         st.session_state.rand_numbers = np.random.randint(0, 10, num_elements)
 
     # Use the value from session state
@@ -152,6 +131,94 @@ def main():
         num_elements = np.random.randint(10, 21)
         st.session_state.rand_numbers = np.random.randint(0, 10, num_elements)
 
+    st.subheader("Edit and Run the Code here:")
+
+    # Code Editor using code_editor function
+
+    # css to inject related to info bar
+    css_string = '''
+    background-color: #bee1e5;
+
+    body > #root .ace-streamlit-dark~& {
+    background-color: #262830;
+    }
+
+    .ace-streamlit-dark~& span {
+    color: #fff;
+    opacity: 0.6;
+    }
+
+    span {
+    color: #000;
+    opacity: 0.5;
+    }
+
+    .code_editor-info.message {
+    width: inherit;
+    margin-right: 75px;
+    order: 2;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.7s ease-out;
+    }
+
+    .code_editor-info.message.show {
+    opacity: 0.6;
+    }
+
+    .ace-streamlit-dark~& .code_editor-info.message.show {
+    opacity: 0.5;
+    }
+    '''
+    # create info bar dictionary
+    info_bar = {
+    "name": "language info",
+    "css": css_string,
+    "style": {
+                "order": "1",
+                "display": "flex",
+                "flexDirection": "row",
+                "alignItems": "center",
+                "width": "100%",
+                "height": "2.5rem",
+                "padding": "0rem 0.75rem",
+                "borderRadius": "8px 8px 0px 0px",
+                "zIndex": "9993"
+            },
+    "info": [{
+                "name": "Python",
+                "style": {"width": "100px"}
+            }]
+    }
+    # add info bar to code editor
+    response_dict = code_editor("#Edit your code here!\n#Save before run!", height=[10, 20], buttons=[
+        {
+            "name": "Save",
+            "feather": "Save",
+            "hasText": True,
+            "commands": ["save-state", ["response", "saved"]],
+            "response": "saved",
+            "showWithIcon": True,
+            "style": {"top": "0rem", "right": "0.4rem"}
+        },
+    ],lang="python",info=info_bar)
+    user_code = response_dict.get("text", default_code)
+
+    st.write("*Dont forget to save your code before running it!* (ctrl+enter or save button)")
+    # Run the code
+    if st.button("Run Code"):
+        try:
+            # Capture the output
+            output = StringIO()
+            sys.stdout = output  # Redirect stdout
+            exec(user_code)  # Execute the user code
+            sys.stdout = sys.__stdout__  # Reset stdout
+            st.toast("Code executed successfully!")
+            # st.toast(user_code)
+            st.text_area("Output:", output.getvalue(), height=150)
+
+        except Exception as e:
+            st.error(f"Error: {e}")
 
     # Create a form for the user to input answers
     with st.form("stats_form"):
@@ -159,7 +226,8 @@ def main():
         user_median = st.number_input("Median", format="%.2f", step=0.1)
         user_mode = st.number_input("Mode", format="%.2f", step=0.1)
         user_variance = st.number_input("Variance", format="%.2f", step=0.1)
-        user_sd = st.number_input("Standard Deviation", format="%.2f", step=0.1)
+        user_sd = st.number_input(
+            "Standard Deviation", format="%.2f", step=0.1)
         submit_button = st.form_submit_button("Submit Answers")
 
     if submit_button:
@@ -172,42 +240,51 @@ def main():
             correct_mode = "No unique mode"
         correct_variance = np.var(rand_numbers)
         correct_sd = np.std(rand_numbers)
-        
+
         # Check the user's answers (using a tolerance for numeric comparisons)
         tolerance = 0.01  # tolerance for floating point comparisons
 
         if abs(user_mean - correct_mean) < tolerance:
-            st.success(f"Mean: Correct! (Your answer: {user_mean:.2f}, Correct: {correct_mean:.2f})")
+            st.success(
+                f"Mean: Correct! (Your answer: {user_mean:.2f}, Correct: {correct_mean:.2f})")
         else:
-            st.error(f"Mean: Incorrect! (Your answer: {user_mean:.2f}, Correct: {correct_mean:.2f})")
+            st.error(
+                f"Mean: Incorrect! (Your answer: {user_mean:.2f}, Correct: {correct_mean:.2f})")
 
         if abs(user_median - correct_median) < tolerance:
-            st.success(f"Median: Correct! (Your answer: {user_median:.2f}, Correct: {correct_median:.2f})")
+            st.success(
+                f"Median: Correct! (Your answer: {user_median:.2f}, Correct: {correct_median:.2f})")
         else:
-            st.error(f"Median: Incorrect! (Your answer: {user_median:.2f}, Correct: {correct_median:.2f})")
+            st.error(
+                f"Median: Incorrect! (Your answer: {user_median:.2f}, Correct: {correct_median:.2f})")
 
         # For mode, compare as string to handle the "No unique mode" case
         if str(user_mode).strip().lower() == str(correct_mode).strip().lower():
-            st.success(f"Mode: Correct! (Your answer: {user_mode}, Correct: {correct_mode})")
+            st.success(
+                f"Mode: Correct! (Your answer: {user_mode}, Correct: {correct_mode})")
         else:
-            st.error(f"Mode: Incorrect! (Your answer: {user_mode}, Correct: {correct_mode})")
+            st.error(
+                f"Mode: Incorrect! (Your answer: {user_mode}, Correct: {correct_mode})")
 
         if abs(user_variance - correct_variance) < tolerance:
-            st.success(f"Variance: Correct! (Your answer: {user_variance:.2f}, Correct: {correct_variance:.2f})")
+            st.success(
+                f"Variance: Correct! (Your answer: {user_variance:.2f}, Correct: {correct_variance:.2f})")
         else:
-            st.error(f"Variance: Incorrect! (Your answer: {user_variance:.2f}, Correct: {correct_variance:.2f})")
+            st.error(
+                f"Variance: Incorrect! (Your answer: {user_variance:.2f}, Correct: {correct_variance:.2f})")
 
         if abs(user_sd - correct_sd) < tolerance:
-            st.success(f"Standard Deviation: Correct! (Your answer: {user_sd:.2f}, Correct: {correct_sd:.2f})")
+            st.success(
+                f"Standard Deviation: Correct! (Your answer: {user_sd:.2f}, Correct: {correct_sd:.2f})")
         else:
-            st.error(f"Standard Deviation: Incorrect! (Your answer: {user_sd:.2f}, Correct: {correct_sd:.2f})")
-
+            st.error(
+                f"Standard Deviation: Incorrect! (Your answer: {user_sd:.2f}, Correct: {correct_sd:.2f})")
 
     st.write("---")
 
     # Activity 3 Section
     st.header("Role-Play Activity: Biostatistics Investigator")
-    
+
     # Introduction to the activity
     st.write("""
     Welcome to the **Introduction to Biostatistics** role-play! In this activity, you will take on the role of a biostatistician
@@ -215,35 +292,40 @@ def main():
     Along the way, you will encounter scenarios that ask you to make decisions based on statistical concepts like mean, median, mode,
     variance, and types of data. Let's get started!
     """)
-    
+
     # Scenario 1: Understanding the Scope of Biostatistics
     st.write("""
     **Scenario 1:** You have been hired as a biostatistician to work on a research project for a public health institute.
     Your first task is to define the **scope** of biostatistics and explain what it is used for. In a few words, biostatistics is
     the application of statistical methods to biological and health sciences to make informed decisions in public health, medicine, and epidemiology.
     """)
-    
-    biostat_answer = st.radio("What is the primary field of application for biostatistics?", ["Physics", "Biology and Health Sciences", "Engineering", "Astronomy"])
-    
+
+    biostat_answer = st.radio("What is the primary field of application for biostatistics?", [
+                              "Physics", "Biology and Health Sciences", "Engineering", "Astronomy"])
+
     # Submit button for scenario 1
     if st.button("Submit for Scenario 1"):
         if biostat_answer == "Biology and Health Sciences":
-            st.success("Correct! 😊 Biostatistics is mainly used in the biological and health sciences.")
+            st.success(
+                "Correct! 😊 Biostatistics is mainly used in the biological and health sciences.")
         else:
-            st.error("Oops! 😞 That's incorrect. The correct answer is 'Biology and Health Sciences'. Try again!")
-    
+            st.error(
+                "Oops! 😞 That's incorrect. The correct answer is 'Biology and Health Sciences'. Try again!")
+
     # Scenario 2: Differences Between Populations and Samples
     st.write("""
     **Scenario 2:** Now, you need to explain the difference between **populations** and **samples** to a colleague.
     A population includes all members of a group, while a sample is a smaller subset taken from the population for analysis.
     """)
-    
-    population_answer = st.radio("Which of the following describes a population?", ["A group of randomly selected individuals from a larger population", "All members of a defined group", "A single person in a study", "None of the above"])
-    
+
+    population_answer = st.radio("Which of the following describes a population?", [
+                                 "A group of randomly selected individuals from a larger population", "All members of a defined group", "A single person in a study", "None of the above"])
+
     # Submit button for scenario 2
     if st.button("Submit for Scenario 2"):
         if population_answer == "All members of a defined group":
-            st.success("Correct! 😊 A population includes all members of a defined group.")
+            st.success(
+                "Correct! 😊 A population includes all members of a defined group.")
         else:
             st.error("Oops! 😞 Try again!")
 
@@ -259,11 +341,15 @@ def main():
     3. **Temperature in Celsius**
     4. **Weight of a person**
     """)
-    
-    data_1 = st.selectbox("1. Blood type (A, B, AB, O)", ["Categorical", "Ordinal", "Interval", "Ratio"])
-    data_2 = st.selectbox("2. Pain level (low, medium, high)", ["Categorical", "Ordinal", "Interval", "Ratio"])
-    data_3 = st.selectbox("3. Temperature in Celsius", ["Categorical", "Ordinal", "Interval", "Ratio"])
-    data_4 = st.selectbox("4. Weight of a person", ["Categorical", "Ordinal", "Interval", "Ratio"])
+
+    data_1 = st.selectbox("1. Blood type (A, B, AB, O)", [
+                          "Categorical", "Ordinal", "Interval", "Ratio"])
+    data_2 = st.selectbox("2. Pain level (low, medium, high)", [
+                          "Categorical", "Ordinal", "Interval", "Ratio"])
+    data_3 = st.selectbox("3. Temperature in Celsius", [
+                          "Categorical", "Ordinal", "Interval", "Ratio"])
+    data_4 = st.selectbox("4. Weight of a person", [
+                          "Categorical", "Ordinal", "Interval", "Ratio"])
 
     # Submit button for scenario 3
     if st.button("Submit for Scenario 3"):
@@ -281,11 +367,12 @@ def main():
             score += 1
         if data_4 == correct_data_4:
             score += 1
-        
+
         if score == 4:
             st.success("Correct! 😊 You got all the data type questions right!")
         else:
-            st.error(f"Oops! 😞 You got {4 - score} answer(s) wrong. Please review your answers.")
+            st.error(
+                f"Oops! 😞 You got {4 - score} answer(s) wrong. Please review your answers.")
 
     # Scenario 4: Summation Notation and Basic Tools
     st.write("""
@@ -297,16 +384,16 @@ def main():
     What is the sum of numbers from 1 to 5?
 
     """)
-    
+
     summation_answer = st.radio("Choose your answer:", ["10", "15", "20", "5"])
-    
+
     # Submit button for scenario 4
     if st.button("Submit for Scenario 4"):
         if summation_answer == "15":
             st.success("Correct! 😊 The sum of numbers from 1 to 5 is 15.")
         else:
             st.error("Oops! 😞 That's incorrect. Try again!")
-    
+
     # Scenario 5: Descriptive Statistics - Mean, Median, Mode, Variance, and Standard Deviation
     st.write("""
     **Scenario 5:** You're now ready to perform some basic descriptive statistics.
@@ -316,9 +403,10 @@ def main():
 
     Enter your answer:
     """)
-    
-    user_mean = st.number_input("Enter the mean value:", format="%.2f", step=0.1)
-    
+
+    user_mean = st.number_input(
+        "Enter the mean value:", format="%.2f", step=0.1)
+
     # Submit button for scenario 5
     if st.button("Submit for Scenario 5"):
         correct_mean = np.mean([5, 10, 15, 20, 25])
@@ -326,5 +414,7 @@ def main():
             st.success(f"Correct! 😊 The mean value is {correct_mean}.")
         else:
             st.error(f"Oops! 😞 Try again!")
+
+
 if __name__ == '__main__':
     main()
