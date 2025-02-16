@@ -74,59 +74,59 @@ def main():
 
     st.write("---")
 
-# Activity 1 Section
-st.header("Activity: Basic Statistical Tools in Python")
-st.write("Modify and run the Python code below to compute basic statistical measures.")
+    # Activity 1 Section
+    st.header("Activity: Basic Statistical Tools in Python")
+    st.write("Modify and run the Python code below to compute basic statistical measures.")
 
-# Default code
-default_code = '''\
-import numpy as np
-import statistics
+    # Default code
+    default_code = '''\
+    import numpy as np
+    import statistics
 
-data = [10, 20, 30, 40, 50, 20, 10, 20, 30, 60]
+    data = [10, 20, 30, 40, 50, 20, 10, 20, 30, 60]
 
-mean_value = np.mean(data)
-median_value = np.median(data)
-mode_value = statistics.mode(np.array(data))
-variance_value = np.var(data)
-std_dev_value = np.std(data)
+    mean_value = np.mean(data)
+    median_value = np.median(data)
+    mode_value = statistics.mode(np.array(data))
+    variance_value = np.var(data)
+    std_dev_value = np.std(data)
 
-print(f'Mean: {mean_value}')
-print(f'Median: {median_value}')
-print(f'Mode: {mode_value}')
-print(f'Variance: {variance_value}')
-print(f'Standard Deviation: {std_dev_value}')
-'''
+    print(f'Mean: {mean_value}')
+    print(f'Median: {median_value}')
+    print(f'Mode: {mode_value}')
+    print(f'Variance: {variance_value}')
+    print(f'Standard Deviation: {std_dev_value}')
+    '''
 
-# ใช้ session_state เพื่อเก็บโค้ดที่แก้ไข
-if "user_code" not in st.session_state:
-    st.session_state.user_code = default_code
+    # ใช้ session_state เพื่อเก็บโค้ดที่แก้ไข
+    if "user_code" not in st.session_state:
+        st.session_state.user_code = default_code
 
-# แสดง Code Editor
-user_code = st.text_area("Edit and Run the Code here:", st.session_state.user_code, height=200)
+    # แสดง Code Editor
+    user_code = st.text_area("Edit and Run the Code here:", st.session_state.user_code, height=200)
 
-# ปุ่มรันโค้ด
-if st.button("Run Code"):
-    try:
-        # Capture the output
-        output = io.StringIO()
-        sys.stdout = output  # Redirect stdout
+    # ปุ่มรันโค้ด
+    if st.button("Run Code"):
+        try:
+            # Capture the output
+            output = io.StringIO()
+            sys.stdout = output  # Redirect stdout
 
-        # อัปเดต session_state ก่อนรันโค้ด
-        st.session_state.user_code = user_code  
+            # อัปเดต session_state ก่อนรันโค้ด
+            st.session_state.user_code = user_code  
 
-        # Execute user-edited code
-        exec(st.session_state.user_code, {})
+            # Execute user-edited code
+            exec(st.session_state.user_code, {})
 
-        # Reset stdout
-        sys.stdout = sys.__stdout__
+            # Reset stdout
+            sys.stdout = sys.__stdout__
 
-        # แสดงผลลัพธ์
-        st.success("Code executed successfully!")
-        st.text_area("Output:", output.getvalue(), height=150)
+            # แสดงผลลัพธ์
+            st.success("Code executed successfully!")
+            st.text_area("Output:", output.getvalue(), height=150)
 
-    except Exception as e:
-        st.error(f"Error: {e}")
+        except Exception as e:
+            st.error(f"Error: {e}")
 
     # Activity 2 Section
     st.subheader("Help Me Code")
