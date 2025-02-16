@@ -111,8 +111,8 @@ print(f'Standard Deviation: {std_dev_value}')
     if "rand_numbers" not in st.session_state:
         # Random numbers between 10 and 20 elements, values between 0 and 100
         # Random number of elements between 10 and 20
-        num_elements = np.random.randint(10, 21)
-        st.session_state.rand_numbers = np.random.randint(0, 10, num_elements)
+        num_elements = np.random.randint(10, 15)
+        st.session_state.rand_numbers = np.random.randint(0, 101, num_elements)
 
     # Use the value from session state
     rand_numbers = st.session_state.rand_numbers
@@ -123,11 +123,14 @@ print(f'Standard Deviation: {std_dev_value}')
     # Add button to generate new random numbers
     if st.button("Generate New Random Numbers"):
         # Generate new random numbers with random length between 10 and 20
-        num_elements = np.random.randint(10, 21)
-        st.session_state.rand_numbers = np.random.randint(0, 10, num_elements)
+        num_elements = np.random.randint(10, 15)
+        st.session_state.rand_numbers = np.random.randint(0, 101, num_elements)
 
     # Code Editor
     code_editor_for_all()
+
+    st.subheader("Your Answers")
+    st.info(f"random_number = {rand_numbers.tolist()}")
 
     # Create a form for the user to input answers
     with st.form("stats_form"):
@@ -135,8 +138,7 @@ print(f'Standard Deviation: {std_dev_value}')
         user_median = st.number_input("Median", format="%.2f", step=0.1)
         user_mode = st.number_input("Mode", format="%.2f", step=0.1)
         user_variance = st.number_input("Variance", format="%.2f", step=0.1)
-        user_sd = st.number_input(
-            "Standard Deviation", format="%.2f", step=0.1)
+        user_sd = st.number_input("Standard Deviation", format="%.2f", step=0.1)
         submit_button = st.form_submit_button("Submit Answers")
 
     if submit_button:
@@ -150,45 +152,51 @@ print(f'Standard Deviation: {std_dev_value}')
         correct_variance = np.var(rand_numbers)
         correct_sd = np.std(rand_numbers)
 
-        # Check the user's answers (using a tolerance for numeric comparisons)
-        tolerance = 0.01  # tolerance for floating point comparisons
+        # Tolerance for floating point comparisons
+        tolerance = 0.01
 
+        # Convert both user and correct mode values to the same type (float or string for "No unique mode")
+        if isinstance(user_mode, (int, float)):
+            user_mode = float(user_mode)
+        if isinstance(correct_mode, (int, float)):
+            correct_mode = float(correct_mode)
+
+        
+        # Compare Mean
         if abs(user_mean - correct_mean) < tolerance:
-            st.success(
-                f"Mean: Correct! (Your answer: {user_mean:.2f}, Correct: {correct_mean:.2f})")
+            st.success(f"Mean: Correct! (Your answer: {user_mean:.2f}, Correct: {correct_mean:.2f})")
         else:
-            st.error(
-                f"Mean: Incorrect! (Your answer: {user_mean:.2f}, Correct: {correct_mean:.2f})")
+            st.error(f"Mean: Incorrect! (Your answer: {user_mean:.2f}, Correct: {correct_mean:.2f})")
 
+        # Compare Median
         if abs(user_median - correct_median) < tolerance:
-            st.success(
-                f"Median: Correct! (Your answer: {user_median:.2f}, Correct: {correct_median:.2f})")
+            st.success(f"Median: Correct! (Your answer: {user_median:.2f}, Correct: {correct_median:.2f})")
         else:
-            st.error(
-                f"Median: Incorrect! (Your answer: {user_median:.2f}, Correct: {correct_median:.2f})")
+            st.error(f"Median: Incorrect! (Your answer: {user_median:.2f}, Correct: {correct_median:.2f})")
 
-        # For mode, compare as string to handle the "No unique mode" case
-        if str(user_mode).strip().lower() == str(correct_mode).strip().lower():
-            st.success(
-                f"Mode: Correct! (Your answer: {user_mode}, Correct: {correct_mode})")
+        # Handle the mode being "No unique mode" case
+        if user_mode == "No unique mode" and correct_mode == "No unique mode":
+            st.success(f"Mode: Correct! (Your answer: {user_mode}, Correct: {correct_mode})")
+        elif user_mode != "No unique mode" and correct_mode != "No unique mode":
+            if abs(user_mode - correct_mode) < tolerance:
+                st.success(f"Mode: Correct! (Your answer: {user_mode}, Correct: {correct_mode})")
+            else:
+                st.error(f"Mode: Incorrect! (Your answer: {user_mode}, Correct: {correct_mode})")
         else:
-            st.error(
-                f"Mode: Incorrect! (Your answer: {user_mode}, Correct: {correct_mode})")
+            st.error(f"Mode: Incorrect! (Your answer: {user_mode}, Correct: {correct_mode})")
 
+
+        # Compare Variance
         if abs(user_variance - correct_variance) < tolerance:
-            st.success(
-                f"Variance: Correct! (Your answer: {user_variance:.2f}, Correct: {correct_variance:.2f})")
+            st.success(f"Variance: Correct! (Your answer: {user_variance:.2f}, Correct: {correct_variance:.2f})")
         else:
-            st.error(
-                f"Variance: Incorrect! (Your answer: {user_variance:.2f}, Correct: {correct_variance:.2f})")
+            st.error(f"Variance: Incorrect! (Your answer: {user_variance:.2f}, Correct: {correct_variance:.2f})")
 
+        # Compare Standard Deviation
         if abs(user_sd - correct_sd) < tolerance:
-            st.success(
-                f"Standard Deviation: Correct! (Your answer: {user_sd:.2f}, Correct: {correct_sd:.2f})")
+            st.success(f"Standard Deviation: Correct! (Your answer: {user_sd:.2f}, Correct: {correct_sd:.2f})")
         else:
-            st.error(
-                f"Standard Deviation: Incorrect! (Your answer: {user_sd:.2f}, Correct: {correct_sd:.2f})")
-
+            st.error(f"Standard Deviation: Incorrect! (Your answer: {user_sd:.2f}, Correct: {correct_sd:.2f})")
 
 def section_activity2():
     # Activity 2 Section
