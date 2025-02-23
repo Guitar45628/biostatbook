@@ -127,7 +127,7 @@ print(f'Standard Deviation: {std_dev_value}')
         st.session_state.rand_numbers = np.random.randint(0, 101, num_elements)
 
     # Code Editor
-    code_editor_for_all()
+    code_editor_for_all(key="code_editor_activity1")
 
     st.subheader("Your Answers")
     st.info(f"random_number = {rand_numbers.tolist()}")

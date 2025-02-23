@@ -10,7 +10,7 @@ def Navbar():
         st.page_link('pages/week1.py',
                      label='Week 01 | Introduction to Biostatistics')
 
-        st.page_link('pages/week2.py', label='Week 02 | Probability and Probability Distributions', disabled=True)
+        st.page_link('pages/week2.py', label='Week 02 | Probability and Probability Distributions', disabled=False)
         st.page_link('pages/week3.py', label='Week 03 | Data Visualization and Descriptive Statistics', disabled=True)
         st.page_link('pages/week4.py', label='Week 04 | Sampling and the Central Limit Theorem', disabled=True)
         st.page_link('pages/week5.py', label='Week 05 | Confidence Intervals and Hypothesis Testing', disabled=True)
