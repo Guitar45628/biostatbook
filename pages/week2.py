@@ -179,9 +179,6 @@ def quiz_1():
                 if i < len(questions) - 1:
                     st.divider()
 
-import streamlit as st
-import io
-from contextlib import redirect_stdout
 
 def quiz_2():
     st.header("Quiz 2: Code Challenge")
