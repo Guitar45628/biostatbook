@@ -4,9 +4,9 @@ import sys
 import uuid  # added import for generating a unique key
 from code_editor import code_editor
 import streamlit as st
+import matplotlib.pyplot as plt
 
-
-def code_editor_for_all(default_code="#Edit your code here!\n#Save before run!", key=None):
+def code_editor_for_all(default_code=None, key=None, warning_text="*Don't forget to save your code before running it!* (ctrl+enter or save button)"):
     # Generate a unique key if none is provided
     if key is None:
         key = str(uuid.uuid4())
@@ -71,6 +71,7 @@ def code_editor_for_all(default_code="#Edit your code here!\n#Save before run!",
     # Add info bar to code editor
     response_dict = code_editor(
         default_code, 
+        ghost_text="Edit your code here!",
         height=[10, 20], 
         buttons=[{
             "name": "Save",
@@ -83,14 +84,16 @@ def code_editor_for_all(default_code="#Edit your code here!\n#Save before run!",
         }],
         lang="python", 
         info=info_bar,
-        key=key
+        key=key, 
+        response_mode="blur", #Auto Save code
+        allow_reset=True
     )
 
     # Default code if no user input
     user_code = response_dict.get("text", "# Default Python code goes here")
 
     st.warning(
-        "*Don't forget to save your code before running it!* (ctrl+enter or save button)"
+        warning_text
     )
 
     # Create unique keys for buttons based on the instance key
@@ -105,12 +108,19 @@ def code_editor_for_all(default_code="#Edit your code here!\n#Save before run!",
         # Run the code
         if st.button("Run Code", type="primary", use_container_width=True, key=run_key):
             try:
+                # clear previous plots
+                plt.close('all')
+
                 # Capture the output
                 output = StringIO()
                 sys.stdout = output  # Redirect stdout
                 exec(user_code)  # Execute the user code
                 sys.stdout = sys.__stdout__  # Reset stdout
                 result_output = output.getvalue()
+
+                # Indicate that code execution is complete
+                st.session_state['code_executed'] = True
+
                 st.toast("Code executed successfully!")
             except Exception as e:
                 st.error(f"Error: {e}")
@@ -129,3 +139,15 @@ def code_editor_for_all(default_code="#Edit your code here!\n#Save before run!",
     # แสดงผลลัพธ์เต็มความกว้างหลังคอลัมน์
     if result_output is not None:
         st.text_area("Output:", result_output, height=150)
+        
+    # Display plots only when there are figures created and code execution is complete
+    if 'code_executed' in st.session_state and st.session_state['code_executed']:
+        if plt.get_fignums():  # Check if there are any figures to display
+            st.pyplot(plt.gcf())  # Show the current figure
+            plt.clf()  # Clear the figure after displaying
+            st.session_state['code_executed'] = False  # Reset the execution flag
+        
+    
+
+    
+    
