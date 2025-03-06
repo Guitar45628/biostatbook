@@ -102,28 +102,10 @@ def code_editor_for_all(default_code=None, key=None, warning_text="*Don't forget
 
     result_output = None
 
-    # สร้างคอลัมน์สำหรับปุ่ม Run และ Download
+    # Create columns for Run and Download buttons
     col1, col2 = st.columns(2)
     with col1:
-        # Run the code
-        if st.button("Run Code", type="primary", use_container_width=True, key=run_key):
-            try:
-                # clear previous plots
-                plt.close('all')
-
-                # Capture the output
-                output = StringIO()
-                sys.stdout = output  # Redirect stdout
-                exec(user_code)  # Execute the user code
-                sys.stdout = sys.__stdout__  # Reset stdout
-                result_output = output.getvalue()
-
-                # Indicate that code execution is complete
-                st.session_state['code_executed'] = True
-
-                st.toast("Code executed successfully!")
-            except Exception as e:
-                st.error(f"Error: {e}")
+        st.button("Run Code", type="primary", use_container_width=True, key=run_key)
 
     with col2:
         st.download_button(
@@ -135,8 +117,28 @@ def code_editor_for_all(default_code=None, key=None, warning_text="*Don't forget
             use_container_width=True,
             key=download_key
         )
+
+    # Run the code outside the columns
+    if st.session_state.get(run_key):
+        try:
+            # clear previous plots
+            plt.close('all')
+
+            # Capture the output
+            output = StringIO()
+            sys.stdout = output  # Redirect stdout
+            exec(user_code)  # Execute the user code
+            sys.stdout = sys.__stdout__  # Reset stdout
+            result_output = output.getvalue()
+
+            # Indicate that code execution is complete
+            st.session_state['code_executed'] = True
+
+            st.toast("Code executed successfully!")
+        except Exception as e:
+            st.error(f"Error: {e}")
     
-    # แสดงผลลัพธ์เต็มความกว้างหลังคอลัมน์
+    # Display the output and plots outside the columns
     if result_output is not None:
         st.text_area("Output:", result_output, height=150)
         
@@ -146,8 +148,7 @@ def code_editor_for_all(default_code=None, key=None, warning_text="*Don't forget
             st.pyplot(plt.gcf())  # Show the current figure
             plt.clf()  # Clear the figure after displaying
             st.session_state['code_executed'] = False  # Reset the execution flag
-        
-    
 
-    
-    
+
+
+
