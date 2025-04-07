@@ -397,18 +397,18 @@ A researcher conducted a study to see if the average systolic blood pressure of 
     st.subheader("Questions:")
     with st.form(key="interpret_t_test_1_mcq"):
         st.write("1. Based on the p-value and the significance level, should you reject or fail to reject the null hypothesis?")
-        q1_choice = st.radio("", ("Reject the null hypothesis", "Fail to reject the null hypothesis"), index=None)
+        q1_choice = st.radio(("Reject the null hypothesis", "Fail to reject the null hypothesis"), index=None, label_visibility = 'hidden')
 
         st.write("2. What does the null hypothesis state in this scenario?")
-        q2_choice = st.radio("", (
+        q2_choice = st.radio((
             "The average systolic blood pressure of patients in this demographic is greater than 120 mmHg.",
             "The average systolic blood pressure of patients in this demographic is less than 120 mmHg.",
             "The average systolic blood pressure of patients in this demographic is equal to 120 mmHg.",
             "The sample mean is equal to the population standard deviation."
-        ), index=None)
+        ), index=None, label_visibility = 'hidden')
 
         st.write("3. Choose the most appropriate conclusion based on the results of this t-test:")
-        q3_choice = st.selectbox("", (
+        q3_choice = st.selectbox((
             "The average systolic blood pressure in this demographic is not significantly different from the national average.",
             "The average systolic blood pressure in this demographic is significantly higher than the national average of 120 mmHg.",
             "The sample size was too small to make a conclusion.",
@@ -459,15 +459,15 @@ A clinical trial compared a new drug to a standard drug for reducing cholesterol
     st.subheader("Questions:")
     with st.form(key="interpret_t_test_2_mcq"):
         st.write("1. Based on the p-value and the significance level, should you reject or fail to reject the null hypothesis?")
-        q4_choice = st.radio("", ("Reject the null hypothesis", "Fail to reject the null hypothesis"), index=None)
+        q4_choice = st.radio(("Reject the null hypothesis", "Fail to reject the null hypothesis"), index=None, label_visibility = 'hidden')
 
         st.write("2. What does the alternative hypothesis suggest in this scenario (for a two-tailed test)?")
-        q5_choice = st.radio("", (
+        q5_choice = st.radio((
             "The new drug reduces LDL cholesterol levels more than the standard drug.",
             "The standard drug reduces LDL cholesterol levels more than the new drug.",
             "The new drug has a different effect on reducing LDL cholesterol levels compared to the standard drug.",
             "There is no difference in the effect of the two drugs."
-        ), index=None)
+        ), index=None, label_visibility = 'hidden')
 
         st.write("3. Choose the most appropriate conclusion based on the results of this t-test:")
         q6_choice = st.selectbox("", (
