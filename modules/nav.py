@@ -14,7 +14,7 @@ def Navbar():
         st.page_link('pages/week5.py', label='Week 05 | Confidence Intervals and Hypothesis Testing', disabled=False)
         st.page_link('pages/week6.py', label='Week 06 | One-Sample and Two-Sample t-Tests', disabled=False)
         st.page_link('pages/week7.py', label='Week 07 | Chi-Square Tests', disabled=False)
-        st.page_link('pages/week8.py', label='Week 08 | Risk Ratios, Odds Ratios, and Experimental Design', disabled=True)
+        st.page_link('pages/week8.py', label='Week 08 | Risk Ratios, Odds Ratios, and Experimental Design', disabled=False)
         st.page_link('pages/week9.py', label='Week 09 | Analysis of Variance (ANOVA)', disabled=True)
         st.page_link('pages/week10.py', label='Week 10 | Regression and Correlation', disabled=True)
         st.page_link('pages/week11.py', label='Week 11 | Logistic Regression and Binary Outcomes', disabled=True)
