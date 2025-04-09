@@ -426,8 +426,8 @@ def activity_calculate_rr_or():
         - **d** = Non-smokers without lung cancer
         """)
 
-    # Reference values from dataset
-    st.write("#### Reference Values from Dataset")
+    # Dataset values table
+    st.write("#### Values from Dataset")
     table_ref = pd.DataFrame({
         "": ["Smokers", "Non-smokers", "Total"],
         "Lung Cancer": [smokers_with_cancer, nonsmokers_with_cancer, smokers_with_cancer + nonsmokers_with_cancer],
@@ -438,148 +438,89 @@ def activity_calculate_rr_or():
     })
     st.table(table_ref)
 
-    # User input section
-    st.write("#### Enter Your Own Values")
-    st.write("You can use the reference values above or enter your own hypothetical values:")
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        st.write("**Smokers:**")
-        user_a = st.number_input("With lung cancer (a):", min_value=0, value=0, step=1)
-        user_b = st.number_input("Without lung cancer (b):", min_value=0, value=0, step=1)
-    
-    with col2:
-        st.write("**Non-smokers:**")
-        user_c = st.number_input("With lung cancer (c):", min_value=0, value=0, step=1)
-        user_d = st.number_input("Without lung cancer (d):", min_value=0, value=0, step=1)
-
-    # Quick-fill buttons
-    col1, col2, col3 = st.columns([1, 1, 1])
-    with col1:
-        if st.button("📊 Use Dataset Values", use_container_width=True):
-            st.session_state.user_a = smokers_with_cancer
-            st.session_state.user_b = smokers_without_cancer
-            st.session_state.user_c = nonsmokers_with_cancer
-            st.session_state.user_d = nonsmokers_without_cancer
-            st.rerun()
-    
-    with col2:
-        if st.button("🔄 Reset Values", use_container_width=True):
-            st.session_state.user_a = 0
-            st.session_state.user_b = 0
-            st.session_state.user_c = 0
-            st.session_state.user_d = 0
-            st.rerun()
-    
-    with col3:
-        if st.button("🧪 Sample Values", use_container_width=True):
-            st.session_state.user_a = 45
-            st.session_state.user_b = 55
-            st.session_state.user_c = 15
-            st.session_state.user_d = 85
-            st.rerun()
-    
-    # Store values in session state if they exist
-    if 'user_a' in st.session_state:
-        user_a = st.session_state.user_a
-    if 'user_b' in st.session_state:
-        user_b = st.session_state.user_b
-    if 'user_c' in st.session_state:
-        user_c = st.session_state.user_c
-    if 'user_d' in st.session_state:
-        user_d = st.session_state.user_d
-
-    # Display user's contingency table
-    if user_a > 0 or user_b > 0 or user_c > 0 or user_d > 0:
-        st.write("#### Your Contingency Table")
-        user_table = pd.DataFrame({
-            "": ["Smokers", "Non-smokers", "Total"],
-            "Lung Cancer": [user_a, user_c, user_a + user_c],
-            "No Lung Cancer": [user_b, user_d, user_b + user_d],
-            "Total": [user_a + user_b, user_c + user_d, user_a + user_b + user_c + user_d]
-        })
-        st.table(user_table)
+    # Set values from the dataset
+    user_a = smokers_with_cancer
+    user_b = smokers_without_cancer
+    user_c = nonsmokers_with_cancer
+    user_d = nonsmokers_without_cancer
 
     # Calculate button
     calculate_btn = st.button("📊 Calculate Risk and Odds Ratios", type="primary", use_container_width=True)
 
     if calculate_btn:
-        if user_a == 0 and user_b == 0 and user_c == 0 and user_d == 0:
-            st.warning("Please enter values in the contingency table before calculating.")
-        else:
-            st.write("### Calculation Results")
-            
-            # Calculate measures
-            risk_exposed = user_a / (user_a + user_b) if (user_a + user_b) > 0 else 0
-            risk_unexposed = user_c / (user_c + user_d) if (user_c + user_d) > 0 else 0
-            risk_ratio = risk_exposed / risk_unexposed if risk_unexposed > 0 else float('inf')
-            
-            odds_exposed = user_a / user_b if user_b > 0 else float('inf')
-            odds_unexposed = user_c / user_d if user_d > 0 else float('inf')
-            odds_ratio = (user_a * user_d) / (user_b * user_c) if user_b > 0 and user_c > 0 else float('inf')
+        st.write("### Calculation Results")
+        
+        # Calculate measures
+        risk_exposed = user_a / (user_a + user_b) if (user_a + user_b) > 0 else 0
+        risk_unexposed = user_c / (user_c + user_d) if (user_c + user_d) > 0 else 0
+        risk_ratio = risk_exposed / risk_unexposed if risk_unexposed > 0 else float('inf')
+        
+        odds_exposed = user_a / user_b if user_b > 0 else float('inf')
+        odds_unexposed = user_c / user_d if user_d > 0 else float('inf')
+        odds_ratio = (user_a * user_d) / (user_b * user_c) if user_b > 0 and user_c > 0 else float('inf')
 
-            # Display calculations with formulas
-            col1, col2 = st.columns(2)
+        # Display calculations with formulas
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.write("#### Risk Ratio Calculation")
+            st.latex(r"RR = \frac{\text{Risk in exposed}}{\text{Risk in unexposed}} = \frac{a/(a+b)}{c/(c+d)}")
             
-            with col1:
-                st.write("#### Risk Ratio Calculation")
-                st.latex(r"RR = \frac{\text{Risk in exposed}}{\text{Risk in unexposed}} = \frac{a/(a+b)}{c/(c+d)}")
-                
-                st.write(f"Risk in exposed (smokers): {user_a}/{user_a + user_b} = {risk_exposed:.4f}")
-                st.write(f"Risk in unexposed (non-smokers): {user_c}/{user_c + user_d} = {risk_unexposed:.4f}")
-                st.write(f"Risk Ratio (RR): {risk_exposed:.4f}/{risk_unexposed:.4f} = **{risk_ratio:.2f}**")
+            st.write(f"Risk in exposed (smokers): {user_a}/{user_a + user_b} = {risk_exposed:.4f}")
+            st.write(f"Risk in unexposed (non-smokers): {user_c}/{user_c + user_d} = {risk_unexposed:.4f}")
+            st.write(f"Risk Ratio (RR): {risk_exposed:.4f}/{risk_unexposed:.4f} = **{risk_ratio:.2f}**")
+        
+        with col2:
+            st.write("#### Odds Ratio Calculation")
+            st.latex(r"OR = \frac{\text{Odds in exposed}}{\text{Odds in unexposed}} = \frac{a/b}{c/d} = \frac{ad}{bc}")
             
-            with col2:
-                st.write("#### Odds Ratio Calculation")
-                st.latex(r"OR = \frac{\text{Odds in exposed}}{\text{Odds in unexposed}} = \frac{a/b}{c/d} = \frac{ad}{bc}")
-                
-                st.write(f"Odds in exposed (smokers): {user_a}/{user_b} = {odds_exposed:.4f}")
-                st.write(f"Odds in unexposed (non-smokers): {user_c}/{user_d} = {odds_unexposed:.4f}")
-                st.write(f"Odds Ratio (OR): {odds_exposed:.4f}/{odds_unexposed:.4f} = **{odds_ratio:.2f}**")
+            st.write(f"Odds in exposed (smokers): {user_a}/{user_b} = {odds_exposed:.4f}")
+            st.write(f"Odds in unexposed (non-smokers): {user_c}/{user_d} = {odds_unexposed:.4f}")
+            st.write(f"Odds Ratio (OR): {odds_exposed:.4f}/{odds_unexposed:.4f} = **{odds_ratio:.2f}**")
 
-            # Interpretation
-            st.write("### Interpretation")
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                st.write("#### Risk Ratio Interpretation")
-                if risk_ratio > 1.1:
-                    st.success(f"Risk Ratio = {risk_ratio:.2f} > 1: Smokers have {risk_ratio:.2f} times higher risk of lung cancer compared to non-smokers.")
-                elif risk_ratio < 0.9:
-                    st.success(f"Risk Ratio = {risk_ratio:.2f} < 1: Smoking appears protective with {1/risk_ratio:.2f} times lower risk of lung cancer.")
-                else:
-                    st.success(f"Risk Ratio ≈ 1: No substantial association between smoking and lung cancer risk.")
-            
-            with col2:
-                st.write("#### Odds Ratio Interpretation")
-                if odds_ratio > 1.1:
-                    st.success(f"Odds Ratio = {odds_ratio:.2f} > 1: The odds of lung cancer are {odds_ratio:.2f} times higher in smokers.")
-                elif odds_ratio < 0.9:
-                    st.success(f"Odds Ratio = {odds_ratio:.2f} < 1: The odds of lung cancer are {1/odds_ratio:.2f} times lower in smokers.")
-                else:
-                    st.success(f"Odds Ratio ≈ 1: No substantial association between smoking and lung cancer odds.")
+        # Interpretation
+        st.write("### Interpretation")
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.write("#### Risk Ratio Interpretation")
+            if risk_ratio > 1.1:
+                st.success(f"Risk Ratio = {risk_ratio:.2f} > 1: Smokers have {risk_ratio:.2f} times higher risk of lung cancer compared to non-smokers.")
+            elif risk_ratio < 0.9:
+                st.success(f"Risk Ratio = {risk_ratio:.2f} < 1: Smoking appears protective with {1/risk_ratio:.2f} times lower risk of lung cancer.")
+            else:
+                st.success(f"Risk Ratio ≈ 1: No substantial association between smoking and lung cancer risk.")
+        
+        with col2:
+            st.write("#### Odds Ratio Interpretation")
+            if odds_ratio > 1.1:
+                st.success(f"Odds Ratio = {odds_ratio:.2f} > 1: The odds of lung cancer are {odds_ratio:.2f} times higher in smokers.")
+            elif odds_ratio < 0.9:
+                st.success(f"Odds Ratio = {odds_ratio:.2f} < 1: The odds of lung cancer are {1/odds_ratio:.2f} times lower in smokers.")
+            else:
+                st.success(f"Odds Ratio ≈ 1: No substantial association between smoking and lung cancer odds.")
 
-            # Visualization
-            st.write("### Visualization")
-            fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
-            
-            # Risk comparison
-            risks = [risk_unexposed, risk_exposed]
-            ax1.bar(['Non-smokers', 'Smokers'], risks, color=['skyblue', 'salmon'])
-            ax1.set_title('Risk Comparison')
-            ax1.set_ylabel('Risk of Lung Cancer')
-            for i, v in enumerate(risks):
-                ax1.text(i, v + 0.01, f"{v:.3f}", ha='center')
-            
-            # Odds comparison
-            odds = [odds_unexposed, odds_exposed]
-            ax2.bar(['Non-smokers', 'Smokers'], odds, color=['lightgreen', 'plum'])
-            ax2.set_title('Odds Comparison')
-            ax2.set_ylabel('Odds of Lung Cancer')
-            for i, v in enumerate(odds):
-                ax2.text(i, v + 0.01, f"{v:.3f}", ha='center')
-            
-            st.pyplot(fig)
+        # Visualization
+        st.write("### Visualization")
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+        
+        # Risk comparison
+        risks = [risk_unexposed, risk_exposed]
+        ax1.bar(['Non-smokers', 'Smokers'], risks, color=['skyblue', 'salmon'])
+        ax1.set_title('Risk Comparison')
+        ax1.set_ylabel('Risk of Lung Cancer')
+        for i, v in enumerate(risks):
+            ax1.text(i, v + 0.01, f"{v:.3f}", ha='center')
+        
+        # Odds comparison
+        odds = [odds_unexposed, odds_exposed]
+        ax2.bar(['Non-smokers', 'Smokers'], odds, color=['lightgreen', 'plum'])
+        ax2.set_title('Odds Comparison')
+        ax2.set_ylabel('Odds of Lung Cancer')
+        for i, v in enumerate(odds):
+            ax2.text(i, v + 0.01, f"{v:.3f}", ha='center')
+        
+        st.pyplot(fig)
 
     # Provide sample code for reference
     st.write("### Reference Code for Calculations")
