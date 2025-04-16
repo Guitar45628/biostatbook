@@ -7,3 +7,5 @@ pandas
 seaborn
 st_tailwind
 statsmodels
+scikit-learn
+lifelines
