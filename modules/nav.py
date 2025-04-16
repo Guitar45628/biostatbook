@@ -17,9 +17,9 @@ def Navbar():
         st.page_link('pages/week8.py', label='Week 08 | Risk Ratios, Odds Ratios, and Experimental Design', disabled=False)
         st.page_link('pages/week9.py', label='Week 09 | Analysis of Variance (ANOVA)', disabled=False)
         st.page_link('pages/week10.py', label='Week 10 | Regression and Correlation', disabled=False)
-        st.page_link('pages/week11.py', label='Week 11 | Logistic Regression and Binary Outcomes', disabled=True)
-        st.page_link('pages/week12.py', label='Week 12 | Power Analysis and Study Design', disabled=True)
-        st.page_link('pages/week13.py', label='Week 13 | Advanced Techniques and Scientific Communication', disabled=True)
+        st.page_link('pages/week11.py', label='Week 11 | Logistic Regression and Binary Outcomes', disabled=False)
+        st.page_link('pages/week12.py', label='Week 12 | Power Analysis and Study Design', disabled=False)
+        st.page_link('pages/week13.py', label='Week 13 | Advanced Techniques and Scientific Communication', disabled=False)
         st.page_link('pages/week14.py', label='Week 14 | Group Projects and Presentations', disabled=True)
         st.page_link('pages/week15.py', label='Week 15 | Review and Final Exam', disabled=True)
 
