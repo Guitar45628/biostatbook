@@ -546,17 +546,18 @@ def main():
     # Table of Contents
     section_table_of_contents()
 
-    section_1_content()
+    # Anchors should be defined BEFORE their respective sections are called
     st.markdown("<a id='introduction-to-probability'></a>", unsafe_allow_html=True) # Anchor for TOC
+    section_1_content()
 
-    section_2_content()
     st.markdown("<a id='basic-probability-rules'></a>", unsafe_allow_html=True) # Anchor for TOC
+    section_2_content()
 
-    section_3_content()
     st.markdown("<a id='probability-distributions'></a>", unsafe_allow_html=True) # Anchor for TOC
+    section_3_content()
     
-    section_4_content()
     st.markdown("<a id='applications-in-biological-research'></a>", unsafe_allow_html=True) # Anchor for TOC
+    section_4_content()
 
     st.markdown("<a id='quiz-1'></a>", unsafe_allow_html=True)
     quiz_1()
