@@ -20,8 +20,8 @@ def Navbar():
         st.page_link('pages/week11.py', label='Week 11 | Logistic Regression and Binary Outcomes', disabled=False)
         st.page_link('pages/week12.py', label='Week 12 | Power Analysis and Study Design', disabled=False)
         st.page_link('pages/week13.py', label='Week 13 | Advanced Techniques and Scientific Communication', disabled=False)
-        st.page_link('pages/week14.py', label='Week 14 | Group Projects and Presentations', disabled=True)
-        st.page_link('pages/week15.py', label='Week 15 | Review and Final Exam', disabled=True)
+        # st.page_link('pages/week14.py', label='Week 14 | Group Projects and Presentations', disabled=True)
+        # st.page_link('pages/week15.py', label='Week 15 | Review and Final Exam', disabled=True)
 
         st.divider()
         footer_html = """<div style='text-align: left;position: fixed;
