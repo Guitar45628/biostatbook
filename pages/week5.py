@@ -392,7 +392,7 @@ else:
 print(f"t-statistic: {t_statistic:.2f}")
 print(f"p-value: {p_value:.4f}")
 print(result)
-    """
+"""
 
     st.subheader("💻 Code Editor")
     st.write("Run the code below to perform the one-sample t-test. Copy the results and input them in the fields below to check your answer.")

@@ -24,6 +24,16 @@ def Navbar():
         # st.page_link('pages/week15.py', label='Week 15 | Review and Final Exam', disabled=True)
 
         st.divider()
+        # Responsive behavior - hide sidebar on small screens
+        hide_sidebar_on_mobile = """
+            <style>
+            @media screen and (max-width: 768px) {
+                div[data-testid="stSidebarNav"] {display: none;}
+            }
+            </style>
+        """
+        st.markdown(hide_sidebar_on_mobile, unsafe_allow_html=True)
+        
         footer_html = """<div style='text-align: left;position: fixed;
             bottom: 0;
             width: 100%;
